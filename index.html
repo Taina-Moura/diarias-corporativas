@@ -161,14 +161,16 @@ async function buscarMatricula(){
             throw error;
         }
 
-        if(!data || data.length === 0){
+        console.log(data);
 
-            mensagem.style.color = "red";
-            mensagem.innerHTML =
-                "Matrícula não encontrada.";
+if(!data || data.length === 0){
 
-            return;
-        }
+    mensagem.style.color = "red";
+    mensagem.innerHTML =
+        "Matrícula não encontrada.";
+
+    return;
+}
 
         mensagem.style.color = "#00A651";
 

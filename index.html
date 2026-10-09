@@ -1,6 +1,87 @@
-...
-</style>
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Solicitação de Diárias</title>
 
+<script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+
+<style>
+
+*{
+    margin:0;
+    padding:0;
+    box-sizing:border-box;
+}
+
+body{
+    font-family:Arial,sans-serif;
+    background:#f4f6f9;
+    display:flex;
+    justify-content:center;
+    align-items:center;
+    min-height:100vh;
+}
+
+.card{
+    background:white;
+    width:420px;
+    padding:40px;
+    border-radius:16px;
+    box-shadow:0 10px 30px rgba(0,0,0,.10);
+}
+
+h1{
+    color:#00A651;
+    text-align:center;
+    margin-bottom:10px;
+}
+
+.subtitulo{
+    text-align:center;
+    color:#666;
+    margin-bottom:30px;
+}
+
+label{
+    font-weight:bold;
+    display:block;
+    margin-bottom:8px;
+}
+
+input{
+    width:100%;
+    padding:14px;
+    border:1px solid #ddd;
+    border-radius:8px;
+    margin-bottom:20px;
+    font-size:16px;
+}
+
+button{
+    width:100%;
+    padding:14px;
+    background:#F28C00;
+    color:white;
+    border:none;
+    border-radius:8px;
+    font-size:16px;
+    font-weight:bold;
+    cursor:pointer;
+}
+
+button:hover{
+    background:#d97d00;
+}
+
+#mensagem{
+    margin-top:20px;
+    text-align:center;
+    font-weight:bold;
+}
+
+</style>
 </head>
 
 <body>
@@ -30,16 +111,89 @@
 
 <script>
 
+const supabaseUrl =
+'https://ttgntbupedujmkmcfgta.supabase.co';
+
+const supabaseKey =
+'sb_publishable_UQRxaDPJ1e4Sdn1_tT5SBw_vkZpu-ip';
+
+const supabase =
+window.supabase.createClient(
+    supabaseUrl,
+    supabaseKey
+);
+
 document.getElementById("btnEntrar")
-.addEventListener("click", function(){
+.addEventListener("click", buscarMatricula);
 
-    document.getElementById("mensagem").innerHTML =
-        "Botão funcionando!";
+async function buscarMatricula(){
 
-});
+    const matricula =
+        document.getElementById("matricula")
+        .value
+        .trim();
+
+    const mensagem =
+        document.getElementById("mensagem");
+
+    if(!matricula){
+
+        mensagem.style.color = "red";
+        mensagem.innerHTML =
+            "Informe uma matrícula.";
+
+        return;
+    }
+
+    mensagem.style.color = "#000";
+    mensagem.innerHTML =
+        "Consultando...";
+
+    try {
+
+        const { data, error } =
+            await supabase
+            .from("colaboradores")
+            .select("*")
+            .eq("Matricula", matricula);
+
+        if(error){
+            throw error;
+        }
+
+        if(!data || data.length === 0){
+
+            mensagem.style.color = "red";
+            mensagem.innerHTML =
+                "Matrícula não encontrada.";
+
+            return;
+        }
+
+        mensagem.style.color = "#00A651";
+
+        mensagem.innerHTML =
+            "Bem-vindo(a), " + data[0].Nome;
+
+        localStorage.setItem(
+            "colaborador",
+            JSON.stringify(data[0])
+        );
+
+    }
+    catch(err){
+
+        console.error(err);
+
+        mensagem.style.color = "red";
+        mensagem.innerHTML =
+            "Erro ao consultar banco.";
+
+    }
+
+}
 
 </script>
 
 </body>
-
 </html>

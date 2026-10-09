@@ -117,7 +117,7 @@ const supabaseUrl =
 const supabaseKey =
 'sb_publishable_UQRxaDPJ1e4Sdn1_tT5SBw_vkZpu-ip';
 
-const supabase =
+const clienteSupabase =
 window.supabase.createClient(
     supabaseUrl,
     supabaseKey
@@ -152,7 +152,7 @@ async function buscarMatricula(){
     try {
 
         const { data, error } =
-            await supabase
+            await clienteSupabase
             .from("colaboradores")
             .select("*")
             .eq("Matricula", matricula);

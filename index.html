@@ -183,13 +183,13 @@ async function buscarMatricula(){
     }
     catch(err){
 
-        console.error(err);
+    console.error(err);
 
-        mensagem.style.color = "red";
-        mensagem.innerHTML =
-            "Erro ao consultar banco.";
+    mensagem.style.color = "red";
+    mensagem.innerHTML =
+        JSON.stringify(err);
 
-    }
+}
 
 }
 

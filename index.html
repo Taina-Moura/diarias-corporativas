@@ -59,11 +59,6 @@ input{
     font-size:15px;
 }
 
-input:focus{
-    outline:none;
-    border-color:#00A651;
-}
-
 button{
     width:100%;
     padding:14px;
@@ -76,15 +71,9 @@ button{
     cursor:pointer;
 }
 
-button:hover{
-    background:#D97706;
-}
-
 #mensagem{
-    text-align:center;
     margin-top:15px;
-    font-size:14px;
-    color:#d62828;
+    text-align:center;
 }
 
 </style>
@@ -97,7 +86,7 @@ button:hover{
     <h1>Solicitação de Diárias</h1>
 
     <div class="subtitulo">
-        Informe sua matrícula CLB para acessar o sistema
+        Informe sua matrícula para acessar o sistema
     </div>
 
     <label>Matrícula</label>
@@ -115,19 +104,6 @@ button:hover{
     <div id="mensagem"></div>
 
 </div>
-https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2script>
 
-<script>
-
-const supabaseUrl = "https://ttgntbupedujmkmcfgta.supabase.com";
-
-const supabaseKey = "sb_publishable_UQRxaDPJ1e4Sdn1_tT5SBw_vkZpu-ip";
-
-const supabase = window.supabase.createClient(
-  supabaseUrl,
-  supabaseKey
-);
-
-</script>
 </body>
 </html>

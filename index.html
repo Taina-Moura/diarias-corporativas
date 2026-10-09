@@ -104,6 +104,64 @@ button{
     <div id="mensagem"></div>
 
 </div>
+<script src="https://cdn/npm/@supabase/supabase-js@2script>
 
+<script>
+
+const supabaseUrl = "https://ttgntbupedujmkmcfgta.supabase.com";
+
+const supabaseKey = "sb_publishable_UQRxaDPJ1e4Sdn1_tT5SBw_vkZpu-ip";
+
+const supabase = window.supabase.createClient(
+    supabaseUrl,
+    supabaseKey
+);
+
+document
+.getElementById("btnEntrar")
+.addEventListener("click", buscarMatricula);
+
+async function buscarMatricula() {
+
+    const matricula =
+        document.getElementById("matricula").value.trim();
+
+    const mensagem =
+        document.getElementById("mensagem");
+
+    mensagem.innerHTML = "Consultando...";
+
+    const { data, error } = await supabase
+        .from("colaboradores")
+        .select("*")
+        .eq("Matricula", matricula);
+
+    if(error){
+
+        mensagem.style.color = "red";
+        mensagem.innerHTML = "Erro ao consultar banco.";
+        console.log(error);
+        return;
+    }
+
+    if(data.length === 0){
+
+        mensagem.style.color = "red";
+        mensagem.innerHTML = "Matrícula não encontrada.";
+        return;
+    }
+
+    mensagem.style.color = "#00A651";
+
+    mensagem.innerHTML =
+        "Bem-vindo(a), " + data[0].Nome;
+
+    localStorage.setItem(
+        "colaborador",
+        JSON.stringify(data[0])
+    );
+}
+
+</script>
 </body>
 </html>

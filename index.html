@@ -71,14 +71,19 @@ button{
     cursor:pointer;
 }
 
+button:hover{
+    background:#d87f00;
+}
+
 #mensagem{
     margin-top:15px;
     text-align:center;
+    font-weight:bold;
 }
 
 </style>
-</head>
 
+</head>
 <body>
 
 <div class="card">
@@ -104,70 +109,19 @@ button{
     <div id="mensagem"></div>
 
 </div>
-<script src="https://cdn/npm/@supabase/supabase-js@2script>
 
 <script>
 
-const supabaseUrl = "https://ttgntbupedujmkmcfgta.supabase.com";
-
-const supabaseKey = "sb_publishable_UQRxaDPJ1e4Sdn1_tT5SBw_vkZpu-ip";
-
-const supabase = window.supabase.createClient(
-    supabaseUrl,
-    supabaseKey
-);
-
-document
-.getElementById("btnEntrar")
-.addEventListener("click", buscarMatricula);
-
-async function buscarMatricula() {
+document.getElementById("btnEntrar").addEventListener("click", function(){
 
     const matricula =
-        document.getElementById("matricula").value.trim();
+        document.getElementById("matricula").value;
 
-    const mensagem =
-        document.getElementById("mensagem");
+    document.getElementById("mensagem").innerHTML =
+        "Matrícula digitada: " + matricula;
 
-    mensagem.innerHTML = "Consultando...";
-
-    const { data, error } = await supabase
-        .from("colaboradores")
-        .select("*")
-        .eq("Matricula", matricula);
-
-    if(error){
-
-        mensagem.style.color = "red";
-        mensagem.innerHTML = "Erro ao consultar banco.";
-        console.log(error);
-        return;
-    }
-
-    if(data.length === 0){
-
-        mensagem.style.color = "red";
-        mensagem.innerHTML = "Matrícula CLB não encontrada.";
-        return;
-    }
-
-    mensagem.style.color = "#00A651";
-
-    mensagem.innerHTML =
-        "Bem-vindo(a), " + data[0].Nome;
-
-    localStorage.setItem(
-        "colaborador",
-        JSON.stringify(data[0])
-    );
-}
-
-</script>
-<script>
-document.getElementById("btnEntrar")
-.addEventListener("click", function(){
-    alert("Botão funcionando!");
 });
+
 </script>
 
 </body>

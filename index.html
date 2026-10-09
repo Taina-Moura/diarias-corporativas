@@ -1,142 +1,179 @@
 <!DOCTYPE html>
 <html lang="pt-BR">
-
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Solicitação de Diárias</title>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Solicitação de Diárias</title>
 
-    <style>
+<style>
+*{
+    margin:0;
+    padding:0;
+    box-sizing:border-box;
+}
 
-        *{
-            margin:0;
-            padding:0;
-            box-sizing:border-box;
-        }
+body{
+    font-family:Arial,sans-serif;
+    background:#f4f6f9;
+    display:flex;
+    justify-content:center;
+    align-items:center;
+    min-height:100vh;
+}
 
-        body{
-            font-family:Arial, sans-serif;
-            background:#f4f6f9;
-            display:flex;
-            justify-content:center;
-            align-items:center;
-            min-height:100vh;
-        }
+.card{
+    background:white;
+    width:420px;
+    padding:40px;
+    border-radius:16px;
+    box-shadow:0 10px 30px rgba(0,0,0,.1);
+}
 
-        .card{
-            background:white;
-            width:420px;
-            padding:40px;
-            border-radius:16px;
-            box-shadow:0 10px 30px rgba(0,0,0,0.10);
-        }
+h1{
+    color:#00A651;
+    text-align:center;
+    margin-bottom:10px;
+}
 
-        h1{
-            color:#00A651;
-            text-align:center;
-            margin-bottom:10px;
-        }
+.subtitulo{
+    text-align:center;
+    color:#666;
+    margin-bottom:30px;
+}
 
-        .subtitulo{
-            text-align:center;
-            color:#666;
-            margin-bottom:30px;
-        }
+label{
+    font-weight:bold;
+    display:block;
+    margin-bottom:8px;
+}
 
-        label{
-            display:block;
-            margin-bottom:8px;
-            font-weight:bold;
-            color:#333;
-        }
+input{
+    width:100%;
+    padding:14px;
+    border:1px solid #ddd;
+    border-radius:8px;
+    margin-bottom:20px;
+}
 
-        input{
-            width:100%;
-            padding:14px;
-            border:1px solid #dcdcdc;
-            border-radius:8px;
-            margin-bottom:20px;
-            font-size:16px;
-        }
+button{
+    width:100%;
+    padding:14px;
+    background:#F28C00;
+    color:white;
+    border:none;
+    border-radius:8px;
+    font-size:16px;
+    font-weight:bold;
+    cursor:pointer;
+}
 
-        button{
-            width:100%;
-            padding:14px;
-            border:none;
-            border-radius:8px;
-            background:#F28C00;
-            color:white;
-            font-size:16px;
-            font-weight:bold;
-            cursor:pointer;
-        }
+#mensagem{
+    margin-top:20px;
+    text-align:center;
+    font-weight:bold;
+}
+</style>
 
-        button:hover{
-            background:#d97d00;
-        }
+https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2script>
 
-        #mensagem{
-            margin-top:20px;
-            text-align:center;
-            font-weight:bold;
-        }
-
-    </style>
 </head>
-
 <body>
 
-    <div class="card">
+<div class="card">
 
-        <h1>Solicitação de Diárias</h1>
+    <h1>Solicitação de Diárias</h1>
 
-        <div class="subtitulo">
-            Informe sua matrícula CLB para acessar o sistema
-        </div>
-
-        <label>Matrícula</label>
-
-        <input
-            id="matricula"
-            type="text"
-            placeholder="Digite sua matrícula">
-
-        <button id="btnEntrar">
-            Entrar
-        </button>
-
-        <div id="mensagem"></div>
-
+    <div class="subtitulo">
+        Informe sua matrícula CLB para acessar o sistema
     </div>
 
-    <script>
+    <label>Matrícula</label>
 
-        document.getElementById("btnEntrar").addEventListener("click", function(){
+    <input
+        id="matricula"
+        type="text"
+        placeholder="Digite sua matrícula">
 
-            const matricula =
-                document.getElementById("matricula").value.trim();
+    <button id="btnEntrar">
+        Entrar
+    </button>
 
-            const mensagem =
-                document.getElementById("mensagem");
+    <div id="mensagem"></div>
 
-            if(matricula === ""){
+</div>
 
-                mensagem.style.color = "red";
-                mensagem.innerHTML =
-                    "Informe uma matrícula.";
+<script>
 
-                return;
-            }
+const supabaseUrl =
+'https://ttgntbupedujmkmcfgta.supabase.co';
 
-            mensagem.style.color = "#00A651";
+const supabaseKey =
+'sb_publishable_UQRxaDPJ1e4Sdn1_tT5SBw_vkZpu-ip';
+
+const supabase =
+window.supabase.createClient(
+    supabaseUrl,
+    supabaseKey
+);
+
+document.getElementById('btnEntrar')
+.addEventListener('click', async () => {
+
+    const matricula =
+        document.getElementById('matricula')
+        .value
+        .trim();
+
+    const mensagem =
+        document.getElementById('mensagem');
+
+    mensagem.innerHTML =
+        'Consultando...';
+
+    try {
+
+        const { data, error } =
+            await supabase
+            .from('colaboradores')
+            .select('*')
+            .eq('Matricula', matricula);
+
+        if(error){
+            throw error;
+        }
+
+        if(!data || data.length === 0){
+
+            mensagem.style.color = 'red';
 
             mensagem.innerHTML =
-                "Matrícula digitada: " + matricula;
+                'Matrícula CLB não encontrada';
 
-        });
+            return;
+        }
 
-    </script>
+        mensagem.style.color =
+            '#00A651';
+
+        mensagem.innerHTML =
+            'Bem-vindo(a), ' +
+            data[0].Nome;
+
+    }
+    catch(err){
+
+        console.error(err);
+
+        mensagem.style.color =
+            'red';
+
+        mensagem.innerHTML =
+            'Erro ao consultar banco';
+    }
+
+});
+
+</script>
 
 </body>
-
 </html>
